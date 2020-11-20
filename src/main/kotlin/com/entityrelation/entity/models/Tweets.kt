@@ -12,10 +12,10 @@ data class Tweets(
 
 
         @Column(nullable = false)
-        val tweet:String,
+        var tweet:String,
 
 
-        @ManyToOne(cascade = [CascadeType.ALL],fetch=FetchType.EAGER)
+        @ManyToOne(fetch=FetchType.EAGER)
         @JoinColumn(name="user_id",referencedColumnName = "id")
         @JsonManagedReference
         val user:User?=null,

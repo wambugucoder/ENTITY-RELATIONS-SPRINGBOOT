@@ -10,6 +10,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 class TweetController {
@@ -33,6 +34,23 @@ class TweetController {
     @GetMapping("/tweets",produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTweets(): MutableList<Tweets> {
         return tweetRepo.findAll()
+    }
+    @PutMapping("/tweet/{id}",consumes=[MediaType.ALL_VALUE],produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun updateTweet(@PathVariable id:Long,@RequestBody request:Tweets): ResponseEntity<TweetResponse> {
+      tweetRepo.findById(id).map { Tweets->
+          Tweets.tweet=request.tweet
+         // val newT=Tweets(Tweets.tweet)
+          tweetRepo.save(Tweets)
+
+      }
+        return ResponseEntity.ok(TweetResponse("Tweet has been Updated"))
+
+
+    }
+    @DeleteMapping("/remove/{id}",produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun deleteTweet(@PathVariable id: Long):ResponseEntity<TweetResponse>{
+        tweetRepo.deleteById(id)
+        return ResponseEntity.ok(TweetResponse("Tweet Deleted Succesfully"))
     }
 }
 
